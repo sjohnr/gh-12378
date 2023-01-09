@@ -1,10 +1,17 @@
 package org.example;
 
+import java.lang.reflect.Type;
+import java.net.CookieStore;
+import java.net.URI;
+import java.util.Map;
+import java.util.Objects;
+
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.HttpCookieStore;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,17 +22,11 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.socket.client.jetty.JettyWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-
-import java.lang.reflect.Type;
-import java.net.CookieStore;
-import java.net.URI;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -79,7 +80,7 @@ class ApplicationTests {
         StompHeaders connectHeaders = new StompHeaders();
         connectHeaders.add(csrfToken.getHeaderName(), csrfToken.getToken());
 
-        CompletableFuture<StompSession> connectAsync = webSocketStompClient.connectAsync(new URI(wsUrl),
+        ListenableFuture<StompSession> connectAsync = webSocketStompClient.connect(new URI(wsUrl),
                 null,
                 connectHeaders,
                 new StompSessionHandlerAdapter() {
