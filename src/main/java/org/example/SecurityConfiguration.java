@@ -43,7 +43,7 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean(name = "csrfChannelInterceptor")
+    @Bean
     public ChannelInterceptor csrfChannelInterceptor() {
         return new XorCsrfChannelInterceptor();
     }
